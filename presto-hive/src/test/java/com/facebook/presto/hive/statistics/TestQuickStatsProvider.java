@@ -244,7 +244,7 @@ public class TestQuickStatsProvider
      * To remove noise due to these flakiness, we disable this test.
      * It is a good candidate for a manual test run for any changes related to Quick Stats
      */
-    @Test(enabled = false, invocationCount = 3)
+    @Test(groups = "flaky", invocationCount = 3)
     public void testConcurrentFetchForSamePartition()
             throws ExecutionException, InterruptedException
     {
@@ -339,7 +339,7 @@ public class TestQuickStatsProvider
      * To remove noise due to these flakiness, we disable this test.
      * It is a good candidate for a manual test run for any changes related to Quick Stats
      */
-    @Test(enabled = false)
+    @Test(groups = "flaky")
     public void quickStatsBuildTimeIsBounded()
             throws Exception
     {
