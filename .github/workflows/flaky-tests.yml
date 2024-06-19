@@ -58,4 +58,4 @@ jobs:
         if: steps.cache-maven.outputs.cache-hit != 'true'
         run: ./mvnw de.qaware.maven:go-offline-maven-plugin:resolve-dependencies --no-transfer-progress && .github/bin/download_nodejs
       - name: Run Flaky Tests
-        run: ./mvnw test ${MAVEN_TEST} -P flaky-tests -pl '!presto-ui'
+        run: ./mvnw test ${MAVEN_TEST} -P \!ui,flaky-tests
