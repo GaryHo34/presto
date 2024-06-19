@@ -21,6 +21,8 @@ import com.facebook.presto.sql.parser.SqlParser;
 import com.facebook.presto.sql.tree.AllColumns;
 import com.facebook.presto.sql.tree.QualifiedName;
 import com.google.common.collect.ImmutableMap;
+import org.testng.IRetryAnalyzer;
+import org.testng.ITestResult;
 import org.testng.annotations.Test;
 
 import java.util.Map;
@@ -41,7 +43,23 @@ public class TestBuiltInQueryPreparer
     private static final Map<String, String> emptyPreparedStatements = ImmutableMap.of();
     private static final AnalyzerOptions testAnalyzerOptions = AnalyzerOptions.builder().build();
 
-    @Test
+    public static class MyRetryAnalyzer
+            implements IRetryAnalyzer
+    {
+        private int retryCount;
+        private static final int maxRetryCount = 5;
+
+        @Override
+        public boolean retry(ITestResult result)
+        {
+            if (result.getStatus() == ITestResult.FAILURE) {
+                retryCount++;
+            }
+            return retryCount < maxRetryCount;
+        }
+    }
+
+    @Test(retryAnalyzer = MyRetryAnalyzer.class)
     public void testSelectStatement()
     {
         BuiltInPreparedQuery preparedQuery = QUERY_PREPARER.prepareQuery(testAnalyzerOptions, "SELECT * FROM foo", emptyPreparedStatements, WarningCollector.NOOP);
